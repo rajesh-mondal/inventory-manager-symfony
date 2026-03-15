@@ -70,7 +70,7 @@ Designed for speed and maintainability without heavy dependencies.
 - **AssetMapper & Vanilla JS:**  Manages assets without Node.js overhead and uses Vanilla JavaScript for core interactions to ensure faster load times.
 
 
-### 🛠 Technical Highlights
+## 🛠 Technical Highlights
 
 - **Language & Framework:** PHP 8.2+ (Attributes, Typed Properties), Symfony  
 - **Database Migration:** Doctrine Migrations for versioned schema control  
