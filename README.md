@@ -7,69 +7,67 @@ The application follows a **Monolithic Architecture** with a strong focus on **d
 
 ## 🚀 Detailed Key Features
 
-### 1. Advanced User Administration
+### 1. Advanced User Administration & Salesforce Integration
 
-The admin panel acts as the **core control center** of the system, providing high-level oversight of all users with a strong emphasis on efficiency and security.
+The admin panel acts as the **core control center** of the system, providing high-level oversight and seamless CRM connectivity.
 
 - **Bulk Processing Engine:**  Utilizes a custom **JavaScript-to-PHP bridge** to handle multiple user actions—such as blocking, role upgrades, and deletions—in a single server request.
 
-- **Intelligent UI Stacking:**  Features a fully responsive table design with **“Hide-and-Seek” logic**, where wide columns are hidden on smaller screens and their data is intelligently nested within primary cells to ensure **100% usability on mobile devices**.
+- **Salesforce CRM Synchronization:**  A specialized action on the user profile page collects additional data to create an **Account** and a linked **Contact** in Salesforce via **REST API**, streamlining marketing and service workflows.
 
-- **Role-Based Access Control (RBAC):**  Leverages Symfony’s native security system to enforce strict access control, ensuring that sensitive routes (e.g., `/admin`) are **completely inaccessible** to non-admin users.
+- **Intelligent UI Stacking:**  Features a responsive design with **"Hide-and-Seek"** logic, ensuring wide columns are intelligently nested for 100% usability on mobile devices.
 
-### 2. Dynamic Inventory Management
+- **Role-Based Access Control (RBAC):**  Leverages Symfony’s native security to ensure sensitive routes, such as `/admin` and CRM actions, are restricted to authorized users.
 
-Built for scale, the inventory module allows users to **track items across different categories** with ease.
+### 2. Dynamic Inventory Management & Odoo Integration
 
-- **Entity Relationships:**  Utilizes **Doctrine ORM** to manage complex **One-to-Many** and **Many-to-Many** relationships between Inventories, Items, and Categories.
+Built for scale, this module manages complex data relationships and provides secure external data access.
 
-- **Contextual Actions:**  Users can perform **bulk edits** on inventory items, including moving items between categories or updating stock levels.
+- **Token-Based API Access:**  Each inventory can generate a unique **API Token** that provides restricted access to aggregated results (average, min, max, or popular values) for external consumption.
+
+- **Odoo Read-Only Viewer:**  An external **Odoo application** acts as a viewer, importing inventory titles and aggregated results via the API token to display detailed health metrics.
+
+- **Entity Relationships:**  Uses **Doctrine ORM** to manage complex One-to-Many and Many-to-Many relationships between Inventories, Items, and Categories.
 
 - **Custom ID Patterns:**  Allows storing and applying **customized ID formats** for inventory items, making it easier to maintain consistent item numbering.
 
 - **Configurable Custom Fields:**  Enables defining which of the **15 optional fields** (e.g., text, number, date fields) are active for a particular inventory, offering maximum flexibility.
 
-- **Auto-Save Functionality:**  Implements a **JavaScript-based auto-save** that sends a POST request to a Symfony controller every few seconds while users are editing, preventing data loss.
+### 3. Item Management & Power Automate Workflows 
 
-### 3. Item Management (The "Data")
+Item handling is enhanced with automated cloud-based reporting and real-time notification triggers.
 
-- **Item Entity:**  Each item includes **fixed fields** such as `created_by` and `created_at`, along with **15 optional columns** in the database to store **custom fields** (e.g., `string_field_1`, `numeric_field_1`), providing flexibility for diverse inventory requirements.
+- **ID Generation:**  Concatenates fixed text, dates, and sequence numbers based on predefined templates whenever an item is saved.
 
-- **ID Generation:**  Implements a **dynamic ID generation system** that concatenates fixed text, date, and sequence numbers based on the inventory’s predefined template whenever an item is saved.
+- **Auto-Save Functionality:** Implements a JavaScript-based auto-save that sends periodic POST requests to a Symfony controller while editing to prevent data loss.
+
+- **Support Ticket Automation:**  Users can trigger a "Create Support Ticket" link from any page to generate a **JSON report** containing their identity, priority level, and contextual links.
+
+- **Cloud Storage Integration:**  Upon submission, the system automatically uploads the JSON ticket to **OneDrive** or **Dropbox** via API.
+
+- **Power Automate Cloud Flows:**  A dedicated flow triggers on file upload to parse the JSON, send **Gmail notifications** to admins, and push real-time mobile notifications to "super-admins".
 
 - **Row Actions:**  Eliminates individual row buttons in favor of a **checkbox-based selection system**, allowing users to perform **global actions** like "Delete" or "Edit" directly from a centralized toolbar.
 
-- **Last Update Tracking:**  Displays the **timestamp of the most recent modification** for each item, helping users monitor changes and maintain accurate inventory records.
+### 4. Collaborative & Social Features
 
-### 4. Real-Time Discussion System
+Enhances engagement through real-time communication and powerful search capabilities.
 
-A **lightweight communication layer** designed for seamless team collaboration on specific inventory items.
+- **Real-Time Discussion System:**  Uses **JavaScript polling** to fetch new comments since the last received ID, ensuring a lightweight communication layer for teams.
 
-- **Intelligent Polling:**  Utilizes a custom **JavaScript interval script** that fetches only new comments since the last received `id`, reducing server load compared to full page refreshes.
+- **Full-Text Search:**  Implements **MySQL FULLTEXT indexes** to allow fast keyword searches across the Inventory and Item tables directly from the navbar.
 
-- **Recursive Cleanup:**  Prevents duplicate DOM elements by tracking state in the browser’s memory, ensuring **smooth scrolling** and uninterrupted user experience as new messages arrive.
+- **Engagement Tracking:**  Users can toggle "likes" on items, which are stored in a dedicated table to track user interaction.
+
+- **Tag Cloud:**  Displays the most frequently used tags on the homepage to help users quickly navigate popular inventory items.
 
 ### 5. Optimized Frontend Architecture
 
-The frontend is designed for **performance, usability, and maintainability**, providing a smooth experience without heavy dependencies.
+Designed for speed and maintainability without heavy dependencies.
 
-- **Component-Based CSS:**  All styles are centralized in `inventory.css`, following a **utility-first approach** similar to Tailwind, but optimized for **custom branding**.
+- **Sticky Selection Bar:**  A **floating toolbar** that appears only when items are selected, giving users immediate access to bulk actions without the need to scroll.
 
-- **Sticky Selection Bar:**  A **floating toolbar** that appears only when items are selected, giving users **immediate access to bulk actions** without the need to scroll.
-
-- **Zero-Runtime JavaScript:**  Uses **vanilla JavaScript** for core interactions, avoiding the overhead of large frameworks like React or Vue for standard CRUD operations, resulting in **faster load times** and higher performance.
-
-### 6. Social & Search Features
-
-Enhances inventory interaction and discoverability through **real-time engagement** and **powerful search capabilities**.
-
-- **Full-Text Search:**  Implements **MySQL FULLTEXT indexes** on the Inventory and Item tables, allowing users to perform **fast and accurate keyword searches**. A search bar is integrated into the Bootstrap navbar for easy access.
-
-- **Likes & Comments:**  
-  - **Comments:** Real-time updates are handled using **Symfony Mercure** or simple **AJAX polling** every 5 seconds, displaying new comments without requiring a page refresh.  
-  - **Likes:** Users can toggle likes with a single click, storing entries in a **likes table** (User ID + Item ID) to track engagement.
-
-- **Tag Cloud:**  A **dynamic section on the homepage** that displays the most frequently used tags, helping users quickly navigate popular inventory items.
+- **AssetMapper & Vanilla JS:**  Manages assets without Node.js overhead and uses Vanilla JavaScript for core interactions to ensure faster load times.
 
 
 ### 🛠 Technical Highlights
